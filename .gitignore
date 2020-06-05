@@ -9,6 +9,8 @@
 /vendor/
 /bin/
 /var/
+/symfony.lock
+/composer.lock
 
 
 ###< symfony/framework-bundle ###

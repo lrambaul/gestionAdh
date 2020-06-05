@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://bootswatch.com/4/yeti/bootstrap.min.css">
+
+    <title>{% block title %}Choix de connexion{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+</head>
+{%block body%}
+{% block javascript_include %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+{% endblock  %}
+
+    <body>
+
+    {# si la personne n'a qu'une seule possibilité de connexion#}
+    {% if taille==1 %}
+
+        {% for co in data %}
+        {# on créé le formulaire avec tous les champs caché#}
+        <form id="formlogin" method="post" action={{co[2]}}>
+            <div class="container mt-4">
+                <h1>Connexion en cours ...</h1>
+                <div class="form-group">
+                    <input type="hidden" name="id" value={{co[0]}}>
+                    <input type="hidden" name="password" value={{co[1]}}>
+                    <input type="hidden" value={{ co[3] }}>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate')}}">
+                </div>
+            </div>
+        </form>
+        {% endfor %}
+
+        {% block javascripts %}
+        {# et on soumet automatiquement le formulaire#}
+        <script>
+            document.getElementById('formlogin').submit();
+        </script>
+        {% endblock %}
+
+    {# Si la personne a plusieurs possibilités de connexion#}
+    {% else %}
+        <h1>Choix de connexion </h1>
+        {% for co in data %}
+        {# on créé le formulaire avec tous les champs cachés sauf le bouton#}
+        <form id="formlogin" method="post" action={{co[2]}}>
+            <div class="container mt-4">
+                <div class="form-group">
+                    <input type="hidden" name="id" value={{co[0]}}>
+                    <input type="hidden" name="password" value={{co[1]}}>
+                    <input type="submit" value={{ co[3] }}>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate')}}">
+                </div>
+            </div>
+        </form>
+        {% endfor %}
+
+    {% endif %}
+    </body>
+
+{% endblock %}
+
+</html>
+

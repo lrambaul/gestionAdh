@@ -1,0 +1,161 @@
+{% extends 'accueil/structure/homestructure.html.twig' %}
+{% block body %}
+
+    <fieldset>
+
+        <a href="{{ path('AjoutAsso')}}" class="btn btn-primary" method="post">Ajouter une association</a>
+
+        {% for association in associations %}
+
+            <h2>Association : {{association.getNomAsso()}}</h2>
+
+            {#Début de la Nav-bar, Les noms des ongles#}
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                {#En-tête pour l'Onglet pour les informations de l'association#}
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#{{association.getNomAsso()}}.info" role="tab" aria-controls="home" aria-selected="true">Informations sur l'association</a>
+                </li>
+                {#En-tête pour l'Onglet pour les gérants de l'association#}
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#{{association.getNomAsso()}}.administrateur" role="tab" aria-controls="profile" aria-selected="false">Liste des gérants de l'association</a>
+                </li>
+                {#En-tête pour l'Onglet pour supprimer l'association#}
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#{{association.getNomAsso()}}.suppression" role="tab" aria-controls="profile" aria-selected="false">Supprimer l'association</a>
+                </li>
+            </ul>
+
+            {#Début du contenu des onglets#}
+            <div class="tab-content">
+                {#Onglet pour les informations de l'association#}
+                <div class="tab-pane active" id="{{association.getNomAsso()}}.info" role="tabpanel" aria-labelledby="home-tab">
+                    <br>
+                    <div class="form-group row">
+                        <label for="staticnom" class="col-sm-2 col-form-label">Nom:  </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control-plaintext" id="staticstatut" value="{{association.getNomAsso()}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="staticnom" class="col-sm-2 col-form-label">Adresse:  </label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly="" class="form-control-plaintext" id="staticstatut" value="{{association.getAdresseAsso()}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="staticadresseA" class="col-sm-2 col-form-label">Adresse e-mail:  </label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly="" class="form-control-plaintext" id="staticadresseA" value="{{association.getMailAsso()}}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="staticnom" class="col-sm-2 col-form-label">Numéro de téléphone:  </label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly="" class="form-control-plaintext" id="staticstatut" value={{association.getTelAsso()}}>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="staticnom" class="col-sm-2 col-form-label">Fédération:  </label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly="" class="form-control-plaintext" id="staticstatut" value={{association.getFederationAsso()}}>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="staticnom" class="col-sm-2 col-form-label">Comité:  </label>
+                        <div class="col-sm-10">
+                            <input type="text" readonly="" class="form-control-plaintext" id="staticstatut" value={{association.getComiteAsso()}}>
+                        </div>
+                    </div>
+
+                    <a href="{{ path('modifprofilAssociationRégion',{'id': association.id})}}" class="btn btn-primary" method="post">Modifier les informations de l'association</a>
+                    <br>
+                </div>
+
+                {#Onglet pour les gérant de l'association#}
+                <div class="tab-pane" id="{{association.getNomAsso()}}.administrateur" role="tabpanel" aria-labelledby="profile-tab">
+                    <br>
+                    <h4>Liste des administrateurs de l'association</h4>
+
+                    <a href="{{ path('ListePersonneRégion',{'idAsso': association.getId()})}}" method="post">Ajouter un administrateur</a>
+
+                    <table id="" class="display" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Adresse e-mail</th>
+                            <th>Modifier</th>
+                            <th>Supprimer</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for personne in association.getPersonnes() %}
+                            <tr>
+
+                                <td>{{ personne.getNomPers() }}</td>
+                                <td>{{ personne.getPrenomPers() }}</td>
+                                <td>{{ personne.getMailPers() }}</td>
+
+
+                                <td>
+                                    <a href="{{ path('modifprofilAdminpourAsso',{'id': personne.getId()}) }}" method="post">Modifier</a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('supprAdmin',{'idPers': personne.id,'idAsso': association.id}) }}" method="post">Supprimer</a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                    <br>
+                </div>
+
+                {#Onglet pour supprimer l'association#}
+                <div class="tab-pane" id="{{association.getNomAsso()}}.suppression" role="tabpanel" aria-labelledby="home-tab">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    Etes-vous sur de vouloir supprimer cette association, ainsi que tout les groupes, adhérents et intérvenants qui lui sont lié ?
+                    <br>
+                    <br>
+                    <br>
+                    <a href="{{ path('SupprAssociationRégion',{'idAsso': association.id})}}" class="btn btn-primary" method="post">Supprimer l'association</a>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <br>
+        {% endfor %}
+    </fieldset>
+
+    {% block javascripts %}
+
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/keytable/2.5.0/js/dataTables.keyTable.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('table.display').DataTable();
+            } );
+        </script>
+
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.5.0/css/keyTable.dataTables.min.css">
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,90 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\Personne:
+            algorithm : bcrypt
+        App\Entity\SuperAdmin:
+            algorithm: bcrypt
+        App\Entity\Intervenant:
+            algorithm: bcrypt
+        App\Entity\AdminStructure:
+            algorithm: bcrypt
+        App\Entity\AdminAsso:
+            algorithm: bcrypt
+        App\Entity\Adherent:
+            algorithm: bcrypt
+
+    providers:
+        in_memory: { memory: ~ }
+
+        all_providers:
+            chain:
+                providers: [bc_provider]
+        bc_provider:
+            chain:
+                providers: [bc_super_provider, bc_struct_provider, bc_asso_provider, bc_inter_provider, bc_adh_provider]
+        bc_super_provider:
+            entity:
+                class: App\Entity\SuperAdmin
+                property: id
+        bc_struct_provider:
+            entity:
+                class: App\Entity\AdminStructure
+                property: id
+        bc_asso_provider:
+            entity:
+                class: App\Entity\AdminAsso
+                property: id
+        bc_inter_provider:
+            entity:
+                class: App\Entity\Intervenant
+                property: id
+        bc_adh_provider:
+            entity:
+                class: App\Entity\Adherent
+                property: id
+
+        # in_memory:
+        #     memory:
+        #         users:
+        #             user:  { password: user, roles: [ 'ROLE_USER' ] }
+        #             admin: { password: admin, roles: [ 'ROLE_ADMIN' ] }
+        # from_database:
+        #     entity:
+        #         class: App/Entity/Login
+        #         property: login
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        public:
+            pattern: ^/public
+            anonymous: lazy
+        main:
+            anonymous: ~
+            provider: all_providers
+            guard:
+                authenticators:
+                    - App\Security\AdherentAuthenticator
+                    - App\Security\AdminAssoAuthenticator
+                    - App\Security\AdminStructureAuthenticator
+                    - App\Security\IntervenantTokenAuthenticator
+                    - App\Security\SuperAdminTokenAuthenticator
+                entry_point: App\Security\AdherentAuthenticator
+            logout:
+                path: security_logout
+                target: /
+
+
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+         # - { path: ^/superadmin, roles: ROLE_SUPER_ADMIN }
+         # - { path: ^/adminregion, roles: ROLE_ADMIN_REGION }
+         # - { path: ^/profil, roles: [ROLE_USER, ROLE_ADMIN_ASSO] }
+         #  - { path: ^/profile, roles: ROLE_USER }
+         # - { path: ^/home, roles: ROLE_USER }
+
+    role_hierarchy:
+        #ROLE_AWA:   [ROLE_USER, ROLE_ADMIN_ASSO, ROLE_ADMIN_REGION]

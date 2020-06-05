@@ -1,0 +1,71 @@
+{% extends 'accueil/association/homeassociation.html.twig' %}
+{% block body %}
+
+    <fieldset>
+        {% for association in associations %}
+
+
+            <legend>Liste des intervenants de l'association : {{association.getNomAsso()}}</legend>
+
+            <a href="{{ path('ListePersonne',{'idAsso': association.getId()})}}" method="post">Ajouter un intervenant</a>
+
+            <table id="" class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Adresse e-mail</th>
+                    <th>Numéro de Téléphone</th>
+                    <th>Adresse</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for intervenant in association.getIntervenant() %}
+                    <tr>
+
+                        <td>{{ intervenant.getPersonne().getNomPers() }}</td>
+                        <td>{{ intervenant.getPersonne().getPrenomPers() }}</td>
+                        <td>{{ intervenant.getPersonne().getMailPers() }}</td>
+                        <td>{{ intervenant.getTelInter() }}</td>
+                        <td>{{ intervenant.getAdresseInter() }}</td>
+
+
+                        <td>
+                            <a href="{{ path('modifprofilIntervenantpourAsso',{'id': intervenant.getPersonne().getId(), 'NumReturn': 2}) }}" method="post">Modifier</a>
+                        </td>
+                        <td>
+                            <a href="{{ path('supprInter',{'idInter': intervenant.id,'idAsso': association.id}) }}" method="post">Supprimer</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+            <br>
+            <hr>
+            <br>
+        {% endfor %}
+    </fieldset>
+
+    {% block javascripts %}
+
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/keytable/2.5.0/js/dataTables.keyTable.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('table.display').DataTable();
+            } );
+        </script>
+
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.5.0/css/keyTable.dataTables.min.css">
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'accueil/adherent/homeadherent.html.twig' %}
+{% block body %}
+
+
+    <fieldset>
+        <legend>Profil de l'adhérent</legend>
+
+        {% for personne in personnes %}
+
+            {% if personne.id == app.user.personne.id %}
+
+                <br>
+                <label for="staticnom" class="col-sm-2 col-form-label">Nom:  </label>
+                <label for="staticnom" class="col-sm-2 col-form-label">{{personne.nom_pers}}  </label>
+
+                <br>
+                <label for="staticprenom" class="col-sm-2 col-form-label">Prénom:  </label>
+                <label for="staticprenom" class="col-sm-2 col-form-label">{{personne.prenom_pers}} </label>
+
+                <br>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">Adresse e-mail:  </label>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">{{personne.mail_pers}}  </label>
+
+            {% endif %}
+        {% endfor %}
+
+        {% for adherent in adherents %}
+            {% if adherent.personne_id == app.user.personne.id %}
+
+                <br>
+                <label for="staticnom" class="col-sm-2 col-form-label">Date de naissance:</label>
+                <label for="staticnom" class="col-sm-2 col-form-label">{{adherent.anniv_adh|date("d/m/Y")}}</label>
+
+                <br>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">Numéro de licence:  </label>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">{{adherent.num_licence}} </label>
+
+                <br>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">Adresse:  </label>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">{{adherent.adresse_adh}} </label>
+
+                <br>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">Numéro de téléphone:  </label>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">{{adherent.tel}} </label>
+
+                <br><br>
+                <a href="{{ path('modifprofilAdherent',{'id': adherent.id})}}" class="btn btn-primary" method="post">Modifier</a>
+
+                <br><br>
+                <a href="{{ path('modifinfopersonne',{'id': adherent.personne_id})}}" class="btn btn-success" method="post">Changer l'adresse mail</a>
+                <a href="{{ path('modifMDPprofilAdherent',{'id': adherent.personne_id})}}" class="btn btn-success" method="post">Changer le mot de passe</a>
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+
+
+{% endblock %}

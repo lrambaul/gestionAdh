@@ -1,0 +1,95 @@
+{% extends 'accueil/structure/homestructure.html.twig' %}
+{% block body %}
+
+    <fieldset>
+
+    {% for association in associations %}
+
+        {#Pour une case de l'accordéon on fait tout ça#}
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    {#Ce qu'il y a d'écrit dans l'entête de l'accordéon#}
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#{{association.getNomAsso()}}" aria-expanded="false" aria-controls="collapseOne">
+                            Association : {{association.getNomAsso()}}
+                        </button>
+                    </h5>
+                </div>
+
+                {#Ce qu'il y a d'écrit dans l'accordéon#}
+                <div id="{{association.getNomAsso()}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+
+                        <a href="{{ path('ListePersonneStruct',{'idAsso': association.getId()})}}" method="post">Ajouter un adhérent</a>
+                        <br>
+                        <br>
+                        Liste des adhérents de l'association :
+
+                        <table id="" class="display" style="width:100%">
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Numéro de Lience</th>
+                                <th>Date de naissance</th>
+                                <th>Adresse e-mail</th>
+                                <th>Numéro de Téléphone</th>
+                                <th>Adresse</th>
+                                <th>Modifier</th>
+                                <th>Supprimer</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for adherent in association.getAdherents() %}
+
+                                <tr>
+
+                                    <td>{{ adherent.getPersonne().getNomPers() }}</td>
+                                    <td>{{ adherent.getPersonne().getPrenomPers() }}</td>
+                                    <td>{{ adherent.getNumLicence() }}</td>
+                                    <td>{{ adherent.getAnnivAdh()|date("d/m/Y") }}</td>
+                                    <td>{{ adherent.getPersonne().getMailPers() }}</td>
+                                    <td>{{ adherent.getTel() }}</td>
+                                    <td>{{ adherent.getAdresseAdh() }}</td>
+
+
+                                    <td>
+                                        <a href="{{ path('modifprofilAdherentpourAsso',{'id': adherent.getPersonne().getId(), 'NumReturn': 3}) }}" method="post">Modifier</a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ path('supprAdhStruct',{'idAdh': adherent.id,'idAsso': association.getId()}) }}" method="post">Supprimer</a>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% block javascripts %}
+
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/keytable/2.5.0/js/dataTables.keyTable.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('table.display').DataTable();
+            } );
+        </script>
+
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.5.0/css/keyTable.dataTables.min.css">
+    {% endblock %}
+
+{% endblock %}

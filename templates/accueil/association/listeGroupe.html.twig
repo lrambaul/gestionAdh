@@ -1,0 +1,183 @@
+{% extends 'accueil/association/homeassociation.html.twig' %}
+{% block body %}
+
+    <fieldset>
+
+    {% for association in associations %}
+
+        {#Pour une case de l'accordéon on fait tout ça#}
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    {#Ce qu'il y a d'écrit dans l'entête de l'accordéon#}
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#{{association.getNomAsso()}}" aria-expanded="false" aria-controls="collapseOne">
+                            Association : {{association.getNomAsso()}}
+                        </button>
+                        <button>
+                            <a href="{{ path('AjoutGroupe',{'idAsso': association.getId(), 'NumReturn': 1})}}" method="post">Ajouter un Groupe</a>
+                        </button>
+                    </h5>
+                </div>
+
+                {#Ce qu'il y a d'écrit dans l'accordéon#}
+                <div id="{{association.getNomAsso()}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+
+                        {% for groupe in association.getGroupes() %}
+                            Pour le groupe : {{groupe.getNomGroupe()}}   <a href="{{ path('modifprofilGroupeAsso',{'idGroupe': groupe.getId(), 'NumReturn': 1})}}" method="post">Modifier le nom du groupe</a>
+                            {#Début de la nav-tab#}
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                {#Premier Onglet de la nav-tab#}
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="Intervenant-tab" data-toggle="tab" href="#{{association.getNomAsso()}}.{{ groupe.getNomGroupe()}}.Inter" role="tab" aria-controls="home" aria-selected="true">Intervenants</a>
+                                </li>
+                                {#Deuxième Onglet de la nav-tab#}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="Adherent-tab" data-toggle="tab" href="#{{association.getNomAsso()}}.{{ groupe.getNomGroupe()}}.Adh" role="tab" aria-controls="profile" aria-selected="false">Adhérents</a>
+                                </li>
+                                {#En-tête pour l'Onglet pour supprimer l'association#}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#{{association.getNomAsso()}}.{{ groupe.getNomGroupe()}}.suppression" role="tab" aria-controls="profile" aria-selected="false">Supprimer le groupe</a>
+                                </li>
+                            </ul>
+                            {#Contenu des Onglets de la nav-tab#}
+                            <div class="tab-content">
+                                {#Contenu du premier Onglet de la nav-tab#}
+                                <div class="tab-pane active" id="{{association.getNomAsso()}}.{{ groupe.getNomGroupe()}}.Inter" role="tabpanel" aria-labelledby="Intervenant-tab">
+
+                                    <a href="{{ path('ListeIntervenantGroupe',{'idGroupe': groupe.getId()})}}" method="post">Ajouter un intervenant</a>
+
+                                    <table id="" class="display" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Adresse e-mail</th>
+                                            <th>Numéro de Téléphone</th>
+                                            <th>Adresse</th>
+                                            <th>Modifier</th>
+                                            <th>Supprimer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for intervenant in groupe.getIntervenants() %}
+                                            <tr>
+
+                                                <td>{{ intervenant.getPersonne().getNomPers() }}</td>
+                                                <td>{{ intervenant.getPersonne().getPrenomPers() }}</td>
+                                                <td>{{ intervenant.getPersonne().getMailPers() }}</td>
+                                                <td>{{ intervenant.getTelInter() }}</td>
+                                                <td>{{ intervenant.getAdresseInter() }}</td>
+
+
+                                                <td>
+                                                    <a href="{{ path('modifprofilIntervenantpourAsso',{'id': intervenant.getPersonne().getId(),'NumReturn': 1}) }}" method="post">Modifier</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('supprInterGroupe',{'idInter': intervenant.id,'idGroupe': groupe.getId(),'NumReturn': 1}) }}" method="post">Supprimer</a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    <hr>
+                                    <br>
+                                </div>
+                                {#Contenu du deuxième Onglet de la nav-tab#}
+                                <div class="tab-pane" id="{{association.getNomAsso()}}.{{ groupe.getNomGroupe()}}.Adh" role="tabpanel" aria-labelledby="Adherent-tab">
+
+                                    <a href="{{ path('ListeAdhGroupe',{'idGroupe': groupe.getId()})}}" method="post">Ajouter un adhérent</a>
+
+                                    <table id="" class="display" style="width:100%">
+                                        <thead>
+                                        <tr>
+                                            <th>Nom</th>
+                                            <th>Prénom</th>
+                                            <th>Numéro de Lience</th>
+                                            <th>Date de naissance</th>
+                                            <th>Adresse e-mail</th>
+                                            <th>Numéro de Téléphone</th>
+                                            <th>Adresse</th>
+                                            <th>Modifier</th>
+                                            <th>Supprimer</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for adherent in groupe.getAdherents() %}
+                                            <tr>
+
+                                                <td>{{ adherent.getPersonne().getNomPers() }}</td>
+                                                <td>{{ adherent.getPersonne().getPrenomPers() }}</td>
+                                                <td>{{ adherent.getNumLicence() }}</td>
+                                                <td>{{ adherent.getAnnivAdh()|date("d/m/Y") }}</td>
+                                                <td>{{ adherent.getPersonne().getMailPers() }}</td>
+                                                <td>{{ adherent.getTel() }}</td>
+                                                <td>{{ adherent.getAdresseAdh() }}</td>
+
+
+                                                <td>
+                                                    <a href="{{ path('modifprofilAdherentpourAsso',{'id': adherent.getPersonne().getId(), 'NumReturn': 1}) }}" method="post">Modifier</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ path('supprAdhGroupe',{'idAdh': adherent.id,'idGroupe': groupe.getId(), 'NumReturn': 1}) }}" method="post">Supprimer</a>
+                                                </td>
+
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                    <hr>
+                                    <br>
+                                </div>
+
+                                {#Onglet pour supprimer le groupe#}
+                                <div class="tab-pane" id="{{association.getNomAsso()}}.{{ groupe.getNomGroupe()}}.suppression" role="tabpanel" aria-labelledby="home-tab">
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    Etes-vous sur de vouloir supprimer ce groupe ?
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <a href="{{ path('SupprGroupeAsso',{'idGroupe': groupe.getId(), 'NumReturn': 1})}}" class="btn btn-primary" method="post">Supprimer le groupe</a>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% block javascripts %}
+
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/keytable/2.5.0/js/dataTables.keyTable.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('table.display').DataTable();
+            } );
+        </script>
+
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.5.0/css/keyTable.dataTables.min.css">
+    {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'accueil/intervenant/homeintervenant.html.twig' %}
+{% block body %}
+
+    <form>
+        <fieldset>
+            <legend>Voici la liste des groupes dans lesquels vous intervenez : </legend>
+
+            {% for groupe in groupes %}
+                <br>
+                <hr>
+                <br>
+                    <label for="staticnom"> Liste des adhérents pour le groupe : "{{groupe.nomGroupe}}"</label>
+
+
+                {% for adherent in groupe.getadherents %}
+
+                    <br>
+                    <label for="staticnom" class="col-sm-2 col-form-label">Nom : {{adherent.getPersonne().getNomPers()}} </label>
+                    <label for="staticnom" class="col-sm-2 col-form-label">Prénom : {{adherent.getPersonne().getPrenomPers()}} </label>
+
+
+
+                {% endfor %}
+
+            {% endfor %}
+            </div>
+        </fieldset>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'accueil/adherent/homeadherent.html.twig' %}
+{% block body %}
+
+    <form>
+        <fieldset>
+            <legend>Liste des groupes</legend>
+
+            {% for groupe in groupes %}
+                <br>
+                <hr>
+                <br>
+            <div class="form-group row">
+                <label for="staticnom" class="col-sm-2 col-form-label">Nom:  </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control-plaintext" id="staticstatut" value="{{groupe.nom_groupe}}">
+                </div>
+            </div>
+
+            {% endfor %}
+            </div>
+        </fieldset>
+    </form>
+
+{% endblock %}

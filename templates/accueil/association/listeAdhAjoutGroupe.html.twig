@@ -1,0 +1,60 @@
+{% extends 'accueil/association/homeassociation.html.twig' %}
+{% block body %}
+
+<fieldset>
+
+    <legend>Liste des Adhérents :</legend>
+
+    <table id="example" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Adresse e-mail</th>
+            <th>Ajouter un adhérent</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for adherent in adherents %}
+            <tr>
+
+                <td>{{ adherent.getPersonne().getNomPers() }}</td>
+                <td>{{ adherent.getPersonne().getPrenomPers() }}</td>
+                <td>{{ adherent.getPersonne().getMailPers() }}</td>
+
+                <td>
+                    <a href="{{ path('AjoutAdhGroupe',{'id': adherent.getId(),'idGroupe': idGroupe,  'NumReturn': 1}) }}" method="post">X</a>
+                </td>
+
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</fieldset>
+
+{% block javascripts %}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/keytable/2.5.0/js/dataTables.keyTable.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var table = $('#example').DataTable( {
+                scrollY: 300,
+                paging:  false,
+                keys:    true
+            } );
+        } );
+    </script>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.5.0/css/keyTable.dataTables.min.css">
+{% endblock %}
+{% endblock %}

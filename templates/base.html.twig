@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:float="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="https://bootswatch.com/4/yeti/bootstrap.min.css">
+    <title>{% block title %}AWA{% endblock %}</title>
+    {% block stylesheets %}
+
+    {% endblock %}
+</head>
+<body>
+    {% block javascript_include %}
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/keytable/2.5.0/js/dataTables.keyTable.min.js"></script>
+
+    {% endblock  %}
+    {% block nav %}
+    {% endblock %}
+<div class='container'>
+    {% block body %}
+    {% endblock %}
+</div>
+</body>
+</html>

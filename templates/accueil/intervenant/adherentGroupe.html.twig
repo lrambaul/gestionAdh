@@ -1,0 +1,31 @@
+{% extends 'accueil/intervenant/homeintervenant.html.twig' %}
+{% block body %}
+
+
+    <fieldset>
+        <legend>Profil de l'adhérent</legend>
+
+        {% for personne in personnes %}
+
+            {% if personne.id == app.user.id %}
+
+                <br>
+                <label for="staticnom" class="col-sm-2 col-form-label">Nom:  </label>
+                <label for="staticnom" class="col-sm-2 col-form-label">"{{personne.nom_pers}}"  </label>
+
+                <br>
+                <label for="staticprenom" class="col-sm-2 col-form-label">Prénom:  </label>
+                <label for="staticprenom" class="col-sm-2 col-form-label">{{personne.prenom_pers}} </label>
+
+                <br>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">Adresse e-mail:  </label>
+                <label for="staticadresseA" class="col-sm-2 col-form-label">{{personne.mail_pers}}  </label>
+
+            {% endif %}
+        {% endfor %}
+
+
+    </fieldset>
+
+
+{% endblock %}

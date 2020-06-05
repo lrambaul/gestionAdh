@@ -1,0 +1,7 @@
+home:
+   path: /home
+   controller: App\Controller\AcceuilController::home
+
+index:
+  path: /
+  controller: App\Controller\SecurityController::login

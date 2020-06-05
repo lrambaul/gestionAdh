@@ -1,0 +1,11 @@
+{% extends 'accueil/adherent/homeadherent.html.twig' %}
+{% block body %}
+
+    {{form_start(formModifProfil)}}
+    {% form_theme formModifProfil 'bootstrap_4_layout.html.twig' %}
+    {{form_end(formModifProfil)}}
+
+    <a href="{{ path('profilpersonne')}}" class="btn btn-primary" method="post">Annuler</a>
+
+
+{% endblock %}

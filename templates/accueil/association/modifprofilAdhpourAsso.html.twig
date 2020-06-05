@@ -1,0 +1,8 @@
+{% extends 'accueil/association/homeassociation.html.twig' %}
+{% block body %}
+
+    {{form_start(formModifProfil)}}
+    {% form_theme formModifProfil 'bootstrap_4_layout.html.twig' %}
+    {{form_end(formModifProfil)}}
+
+{% endblock %}

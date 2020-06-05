@@ -1,0 +1,68 @@
+{% extends 'accueil/association/homeassociation.html.twig' %}
+{% block body %}
+
+<fieldset>
+
+    <legend>Liste des Personnes :</legend>
+
+    <table id="example" class="display" style="width:100%">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Adresse e-mail</th>
+            <th>Ajouter un adhérent</th>
+            <th>Ajouter un intervenant</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for personne in personnes %}
+            <tr>
+
+                <td>{{ personne.getNomPers() }}</td>
+                <td>{{ personne.getPrenomPers() }}</td>
+                <td>{{ personne.getMailPers() }}</td>
+
+
+                <td>
+                    <a href="{{ path('AjoutAdh',{'id': personne.getId(),'idAsso': idAsso}) }}" method="post">X</a>
+                </td>
+
+                <td>
+                    <a href="{{ path('AjoutInter',{'id': personne.getId(),'idAsso': idAsso}) }}" method="post">X</a>
+                </td>
+
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+    <a href="{{ path('AjoutPersonne', {'idAsso': idAsso})}}" method="post">Ajouter une nouvelle personne</a>
+
+</fieldset>
+
+{% block javascripts %}
+
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/keytable/2.5.0/js/dataTables.keyTable.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var table = $('#example').DataTable( {
+                scrollY: 300,
+                paging:  false,
+                keys:    true
+            } );
+        } );
+    </script>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/keytable/2.5.0/css/keyTable.dataTables.min.css">
+{% endblock %}
+{% endblock %}
